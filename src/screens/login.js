@@ -50,7 +50,7 @@ export default function Login() {
             </div>
             <button type="submit" className="btn btn-primary" style={{backgroundColor:'orange'}}>Login</button>
             <Link to="/createuser" className="btn btn-primary bg-danger m-3"> New User? Sign up </Link>
-          </form>
+          </form>f
         </div>
       </div>
     </div>

@@ -2,7 +2,6 @@ import React, { Suspense, lazy, useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import Card from "../components/Card";
-
 import SearchBar from "../components/searchBar";
 const SplineComponent = lazy(() => import("@splinetool/react-spline"));
 
