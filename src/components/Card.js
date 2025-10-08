@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatchCart, useCart } from './CartContext'
 export default function Card({ foodItem }) {
     const [qty, setQty] = useState(1);
     const [size, setSize] = useState("");
-    const priceRef = useRef();
     const dispatch = useDispatchCart();
     const data = useCart();
 
