@@ -5,7 +5,17 @@ const mongoose = require("mongoose")
 const connectMongoDB = require('./db')
 const router = express.Router()
 const User = require('./models/user')
-connectMongoDB()
+
+// Initialize MongoDB connection
+connectMongoDB().then((success) => {
+    if (success) {
+        console.log('Database connection successful');
+    } else {
+        console.log('Database connection failed, but server will continue running');
+    }
+}).catch((error) => {
+    console.log('Database connection error:', error);
+});
 
 // CORS configuration
 app.use((req, res, next) => {

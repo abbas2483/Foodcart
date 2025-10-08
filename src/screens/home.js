@@ -3,6 +3,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import Card from "../components/Card";
 import SearchBar from "../components/searchBar";
+import config from "../config";
 const SplineComponent = lazy(() => import("@splinetool/react-spline"));
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
 
   const loadData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/foodData", {
+      const response = await fetch(`${config.API_URL}/api/foodData`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

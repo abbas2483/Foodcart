@@ -1,6 +1,7 @@
 import { useState, Suspense, lazy } from "react";
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import config from "../config";
 const SplineComponent = lazy(() => import('@splinetool/react-spline'));
 export default function Login() {
   const [credentials, setcredentials] = useState({ email: "", password: "" });
@@ -8,7 +9,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(JSON.stringify({ email: credentials.email, password: credentials.password }));
-    const response = await fetch("http://localhost:5000/api/loginuser", {
+    const response = await fetch(`${config.API_URL}/api/loginuser`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

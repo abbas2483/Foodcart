@@ -1,5 +1,6 @@
 import React,{useState,Suspense,lazy} from 'react'
 import { Link } from 'react-router-dom';
+import config from "../config";
 const SplineComponent = lazy(() => import('@splinetool/react-spline'));
 
 export default function Signup() {
@@ -7,7 +8,7 @@ export default function Signup() {
     const handleSubmit = async(e) => {
             e.preventDefault();
             console.log(JSON.stringify({name: credentials.name, email: credentials.email, password: credentials.password, location: credentials.geolocation})); 
-            const response = await fetch("http://localhost:5000/api/createuser", {
+            const response = await fetch(`${config.API_URL}/api/createuser`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
