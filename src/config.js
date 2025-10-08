@@ -6,4 +6,9 @@ const config = {
                 : 'http://localhost:5000')
 };
 
+// Ensure no trailing slash
+if (config.API_URL.endsWith('/')) {
+    config.API_URL = config.API_URL.slice(0, -1);
+}
+
 export default config; 
