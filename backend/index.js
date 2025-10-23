@@ -22,7 +22,8 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     process.env.FRONTEND_URL,
     "http://localhost:3000",
-    "https://foodcart-tau.vercel.app"
+    "https://foodcart-tau.vercel.app",
+    "https://foodcart-8thq.vercel.app"  // Your actual frontend URL
   ].filter(Boolean); // Remove undefined values
   
   const origin = req.headers.origin;
