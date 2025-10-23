@@ -1,6 +1,13 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
+// Cache the connection to avoid multiple connections
+let cached = global.mongoose;
+
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+}
+
 async function connectMongoDB() {
     try {
         // Check if required environment variables are provided
@@ -16,20 +23,47 @@ async function connectMongoDB() {
             return false;
         }
 
-        await mongoose.connect(process.env.MongoDBConnectionURL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log("Mongo DB Connected Successfully");
+        // If already connected, return true
+        if (cached.conn) {
+            console.log("Using existing MongoDB connection");
+            return true;
+        }
 
-        // Test the connection by fetching a small sample
-        const fetchedData = await mongoose.connection.db.collection("Food-items").find({}).limit(1).toArray();
-        const foodCategory = await mongoose.connection.db.collection("Food-category").find({}).limit(1).toArray();
-        console.log("Database test query successful - Food items:", fetchedData.length, "Categories:", foodCategory.length);
+        // If connection is in progress, wait for it
+        if (!cached.promise) {
+            const opts = {
+                bufferCommands: false,
+                serverSelectionTimeoutMS: 10000,
+                socketTimeoutMS: 45000,
+                maxPoolSize: 10,
+                retryWrites: true,
+                w: "majority"
+            };
+
+            cached.promise = mongoose.connect(process.env.MongoDBConnectionURL, opts).then((mongoose) => {
+                console.log("Mongo DB Connected Successfully");
+                return mongoose;
+            });
+        }
+
+        cached.conn = await cached.promise;
+        
+        // Test the connection
+        try {
+            const fetchedData = await mongoose.connection.db.collection("Food-items").find({}).limit(1).toArray();
+            const foodCategory = await mongoose.connection.db.collection("Food-category").find({}).limit(1).toArray();
+            console.log("Database test query successful - Food items:", fetchedData.length, "Categories:", foodCategory.length);
+        } catch (testError) {
+            console.log("Database test query failed:", testError.message);
+        }
         
         return true;
     } catch (error) {
         console.error('Mongo DB Connection Error', error);
+        
+        // Reset the cached connection on error
+        cached.conn = null;
+        cached.promise = null;
         
         // Provide helpful error messages based on error type
         if (error.name === 'MongooseServerSelectionError') {

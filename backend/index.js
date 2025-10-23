@@ -17,6 +17,19 @@ connectMongoDB().then((success) => {
     console.log('Database connection error:', error);
 });
 
+// Handle MongoDB connection events
+mongoose.connection.on('connected', () => {
+    console.log('Mongoose connected to MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.log('Mongoose connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+    console.log('Mongoose disconnected');
+});
+
 // CORS configuration
 app.use((req, res, next) => {
   const allowedOrigins = [
