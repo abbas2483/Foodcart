@@ -1,6 +1,5 @@
 import React from 'react';
 import { useCart, useDispatchCart } from '../components/CartContext';
-import config from '../config';
 
 export default function Cart() {
     const data = useCart();
@@ -8,7 +7,7 @@ export default function Cart() {
 
     const handleCheckOut = async () => {
         let userEmail = localStorage.getItem("userEmail");
-        let response = await fetch(`${config.API_URL}/api/orderData`, {
+        let response = await fetch("http://localhost:5000/api/orderData", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

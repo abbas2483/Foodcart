@@ -16,16 +16,16 @@ async function connectMongoDB() {
             return false;
         }
 
-        await mongoose.connect(process.env.MongoDBConnectionURL);
+        await mongoose.connect(process.env.MongoDBConnectionURL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
         console.log("Mongo DB Connected Successfully");
 
-        const fetchedData = await mongoose.connection.db.collection("Food-items").find({}).toArray();
-        const foodCategory = await mongoose.connection.db.collection("Food-category").find({}).toArray();
-        console.log("before");
-        
-        global.foodItems = fetchedData;
-        global.foodcategory = foodCategory;
-        console.log("after");
+        // Test the connection by fetching a small sample
+        const fetchedData = await mongoose.connection.db.collection("Food-items").find({}).limit(1).toArray();
+        const foodCategory = await mongoose.connection.db.collection("Food-category").find({}).limit(1).toArray();
+        console.log("Database test query successful - Food items:", fetchedData.length, "Categories:", foodCategory.length);
         
         return true;
     } catch (error) {

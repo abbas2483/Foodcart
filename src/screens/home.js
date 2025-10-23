@@ -13,18 +13,32 @@ export default function Home() {
 
   const loadData = async () => {
     try {
+      console.log("Fetching data from:", `${config.API_URL}/api/foodData`);
       const response = await fetch(`${config.API_URL}/api/foodData`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       console.log("Data received:", data); // Debug log
-      setFoodItems(data[0]);
-      setFoodCat(data[1]);
+      
+      if (Array.isArray(data) && data.length === 2) {
+        setFoodItems(data[0]);
+        setFoodCat(data[1]);
+      } else {
+        console.error("Invalid data format received:", data);
+      }
     } catch (error) {
       console.error("Error loading data:", error);
+      // Set empty arrays to prevent infinite loading
+      setFoodItems([]);
+      setFoodCat([]);
     }
   };
 
